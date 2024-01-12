@@ -8,6 +8,7 @@ function HomePage() {
   const [products, setProducts] = useState([]);
   const [isError, setIsError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("it");
 
   const getProducts = async () => {
     try {
@@ -54,7 +55,12 @@ function HomePage() {
         <div className="category-filter">
           <label>
             View Category
-            <select id="category" name="category" value="it">
+            <select
+              id="category"
+              name="category"
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+            >
               <option disabled value="">
                 -- Select a category --
               </option>

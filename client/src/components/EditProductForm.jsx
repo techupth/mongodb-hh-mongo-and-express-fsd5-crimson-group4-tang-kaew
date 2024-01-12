@@ -4,21 +4,31 @@ import { useNavigate, useParams } from "react-router-dom";
 
 function EditProductForm() {
   const params = useParams();
+  console.log("Product ID from params:", params.productId);
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("it");
 
   const getCurrentProduct = async () => {
-    const result = await axios(
-      `http://localhost:4001/products/${params.productId}`
-    );
-    setName(result.data.data.name);
-    setImageUrl(result.data.data.image);
-    setPrice(result.data.data.price);
-    setDescription(result.data.data.description);
+    try {
+      const result = await axios(
+        `http://localhost:4001/products/${params.productId}`
+      );
+      console.log(result);
+
+      console.log("Current product data:", result.data);
+      setName(result.data.data.name);
+      setImageUrl(result.data.data.image);
+      setPrice(result.data.data.price);
+      setDescription(result.data.data.description);
+      setCategory(result.data.data.category);
+    } catch (error) {
+      console.error("Error fetching current product:", error);
+    }
   };
 
   const updateProduct = async () => {
@@ -27,6 +37,7 @@ function EditProductForm() {
       image: imageUrl,
       price,
       description,
+      category,
     });
     navigate("/");
   };
@@ -108,7 +119,12 @@ function EditProductForm() {
       <div className="input-container">
         <label>
           Category
-          <select id="category" name="category" value="">
+          <select
+            id="category"
+            name="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
             <option disabled value="">
               -- Select a category --
             </option>
